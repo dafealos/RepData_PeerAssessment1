@@ -20,7 +20,7 @@ steps_total <- activity2 %>% group_by(date) %>%  summarise(steps = sum(value))
 
 summary(steps_total$steps) 
 
-
+png(filename = "Histogram of total steps taken per day.png")
 hist(steps_total$steps, main = "Histogram of total steps taken per day", 
      xlab = "Total steps per day", ylab = "Number of days", 
      breaks = 10, col = "red")
@@ -28,14 +28,15 @@ abline(v = mean(steps_total$steps), lty = 2, lwd = 2, col = "yellow")
 abline(v = median(steps_total$steps), lty = 3, lwd = 2, col = "black")
 legend(x = "topright", c("Mean", "Median"), col = c("yellow", "black"), 
        lty = c(1, 2), lwd = c(2, 2))
-
+dev.off()
 
 steps_means <- activity2 %>% group_by(interval) %>% summarise(steps = mean(value))
 
-
+png(filename = "Average steps taken over all days vs time interval.png")
 plot(steps_means$interval, steps_means$steps, ty = "l",
      xlab = "time interval", ylab = "Average steps", 
      main = "Average steps taken over all days vs time interval")
+dev.off()
 
 maxsteps <- steps_means$interval[which.max(steps_means$steps)]
 maxsteps
@@ -65,7 +66,7 @@ activity4 <- melt(activity3, id.vars = c("date", "interval"))
 steps_total <- dcast(activity4, date ~ variable, sum, na.rm = TRUE)
 head(steps_total)
 
-## Histogram of total number of steps taken with imputed missing values
+png(filename = "Histogram of total steps taken per day including NA.png")
 hist(steps_total$steps, main = "Histogram of total steps taken per day", 
      xlab = "Total steps per day", ylab = "Number of days", 
      breaks = 10, col = "green")
@@ -73,6 +74,7 @@ abline(v = mean(steps_total$steps), lty = 1, lwd = 2, col = "yellow")
 abline(v = median(steps_total$steps), lty = 2, lwd = 2, col = "black")
 legend(x = "topright", c("Mean", "Median"), col = c("yellow", "black"), 
        lty = c(2, 1), lwd = c(2, 2))
+dev.off()
 
 ## Number of rows with NA values
 sum(is.na(activity$steps))
@@ -114,5 +116,6 @@ row.names(steps_means) <- NULL
 
 head(steps_means)
 
-library(ggplot2)
+png(filename = "days.png")
 ggplot(steps_means, aes(interval, steps)) + geom_line() + ggtitle("Weekdays") + theme_bw()
+dev.off()
